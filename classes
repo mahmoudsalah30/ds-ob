@@ -1,0 +1,14 @@
+Introduction to Classes
+In Python, a class is defined as follows:
+
+ class Vehicle: # definition of the class Vehicle
+    def __init__ (self, a, b = None):
+        self.seats = a                      # number of seats in the vehicle
+        self.passengers = b if b else []    # list containing passenger names
+
+    def print_passengers (self):
+        for i in range (len (self.passengers)):
+            print (self.passengers [i])
+            ```
+``` py
+car1 = Vehicle(4, ['Pierre', 'Adrian']) # instantiation of an object from the Vehicle class
