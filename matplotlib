@@ -85,8 +85,8 @@ df.plot.scatter(x='Product1', y='Product2', c = 'Returns', s=30, cmap = 'viridis
 
 
 =========================
-histogram 
-
+ch 5 histogram 
+---------------
 
 
 (a) Create a histogram from 40numbers randomly selected between 0 and 10, using the function np.random.choice, composed of 7 intervals, width 0.8, and orange color.
@@ -94,6 +94,32 @@ histogram
 import random
 x=np.random.choice(11,40)
 plt.hist(x,bins=7,color='orange',rwidth=.8)
+
+
+It is possible to display frequencies rather than numbers in ordinates by adding the argument density = True. The parameter orientation ='horizontal' allows to draw a horizontal histogram.
+
+(b) Display a horizontal histogram from the series of values x= [1, 2, 2, 2, 3, 3, 4, 4, 4, 4, 4, 4, 5, 5], with numbers between 1 and 5, 5 intervals, bars reduced by  0.6, pink in color (code #EE3459') and replacing the occurrence numbers with the corresponding frequencies.
+
+(c) Give the x-axis the label "frequencies", the y-axis the label "values", and the graph the title "Horizontal histogram".
+
+
+
+
+x = [1, 2, 2, 2, 3, 3, 4, 4, 4, 4, 4, 4, 5, 5]
+plt.hist(x, range = (1, 6), bins = 5, color = '#EE3459',
+            density = True,
+            orientation = 'horizontal', rwidth = 0.6)
+plt.ylabel('frequencies')
+plt.xlabel('values')
+plt.title('Horizontal histogram');
+
+
+
+links 
+-----
+https://www.w3schools.com/python/module_random.asp
+
+
 
 
 
