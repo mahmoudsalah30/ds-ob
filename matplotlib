@@ -26,3 +26,61 @@ plt.bar(x2,df12['Product2'], width = barWidth, label = "Product2")
 plt.xticks([0,2,4,6,8,11], ['January', 'March', 'May', 'July', 'September', 'December'])
 plt.legend();
 
+
+
+=========
+
+ch3 scatter
+==========
+## Please run this cell before starting the exercise
+%matplotlib inline
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+
+
+The list of colors available on Matplotlib might seem limited for some, it is possible to use HEX color codes to color any type of graph.
+
+(a) Create the list x of abscissae 1 to 5, then the following lists y1 and y2: [0,2, 3, 8, 15], [5, 8, 11, 16, 22].
+
+(b) Display the points of coordinates x and y1 in yellow and of increasing sizes: 30, 60, 90, 120, 150.
+
+(c) Display the points of coordinates x and y2, of size 40 and with colors: ['#d248a2', '#8b48d2', '#48a5d2', '#4dd248', '#d1d248'].
+
+
+### Insert your code here
+x=range(1,6)
+y1=[0,2, 3, 8, 15]
+y2=[5, 8, 11, 16, 22]
+plt.scatter(x,y1,c='yellow')
+plt.scatter(x,y2,s=40,c= ['#d248a2', '#8b48d2', '#48a5d2', '#4dd248', '#d1d248'])
+
+
+
+
+When working with dataframes, the parameter c allows to color the points according to the values taken by the points in a column, by passing this column as an argument to the parameter c.
+
+(d) Read the file 'sales_data.csv'.
+
+(e) Display a scatter plot of abscissa points df.Product1 and ordinates df.Product2, size 30, and color the points with respect to df.Returns
+
+
+
+### Insert your code here
+df=pd.read_csv('sales_data.csv')
+df
+
+plt.scatter(df['Product1'],df['Product2'],s=30,c=df.Returns)
+
+
+
+
+df.plot.scatter(x='Product1', y='Product2', c = 'Returns', s=30, cmap = 'viridis');
+
+# cmap allows to add a color palette, among all the available ones here : 
+#https://matplotlib.org/examples/color/colormaps_reference.html.
+
+
+
+
