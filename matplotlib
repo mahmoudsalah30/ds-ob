@@ -84,3 +84,18 @@ df.plot.scatter(x='Product1', y='Product2', c = 'Returns', s=30, cmap = 'viridis
 
 
 
+=========================
+histogram 
+
+
+
+(a) Create a histogram from 40numbers randomly selected between 0 and 10, using the function np.random.choice, composed of 7 intervals, width 0.8, and orange color.
+
+import random
+x=np.random.choice(11,40)
+plt.hist(x,bins=7,color='orange',rwidth=.8)
+
+
+
+
+
