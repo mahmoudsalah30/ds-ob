@@ -1,0 +1,74 @@
+python3 -m venv venv
+source venv/bin/activate
+pip3 install fastapi httptools uvloop uvicorn
+
+
+
+	Create a file called main.py and paste the following lines :
+from fastapi import FastAPI
+api = FastAPI()
+@api.get('/')
+def get_index():
+    return {'data': 'hello world'}
+
+
+uvicorn main:api --reload
+
+
+curl -X GET http://127.0.0.1:8000/       
+
+
+
+	Modify the main.py file by putting the following routes
+@api.get('/')
+def get_index():
+    return {
+        'method': 'get',
+        'endpoint': '/'
+        }
+@api.get('/other')
+def get_other():
+    return {
+        'method': 'get',
+        'endpoint': '/other'
+    }
+@api.post('/')
+def post_index():
+    return {
+        'method': 'post',
+        'endpoint': '/'
+        }
+@api.delete('/')
+def delete_index():
+    return {
+        'method': 'delete',
+        'endpoint': '/'
+        }
+@api.put('/')
+def put_index():
+    return {
+        'method': 'put',
+        'endpoint': '/'
+        }
+@api.patch('/')
+def patch_index():
+    return {
+        'method': 'patch',
+        'endpoint': '/'
+        }
+	Run the following commands to test all routes :
+# GET at /
+curl -X GET -i http://127.0.0.1:8000/                      
+# POST at /
+curl -X POST -i http://127.0.0.1:8000/                      
+# PUT at /
+curl -X PUT -i http://127.0.0.1:8000/                      
+# DELETE at /
+curl -X DELETE -i http://127.0.0.1:8000/                       
+# PATCH at /
+curl -X PATCH -i http://127.0.0.1:8000/                      
+# GET at /other
+curl -X GET -i http://127.0.0.1:8000/other       
+
+
+Open the URL http://localhost:8000/redoc 
