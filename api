@@ -72,3 +72,92 @@ curl -X GET -i http://127.0.0.1:8000/other
 
 
 Open the URL http://localhost:8000/redoc 
+
+
+
+dynamic routing 
+---------------
+----------------
+using integer  
+-----------------
+
+
+{"route":"dynamic","itemid":1234}msalah@EQ-EQ6298254:~/work/ds/api$ cat main.py
+from fastapi import FastAPI
+api = FastAPI(
+    title='My API'
+)
+@api.get('/')
+def get_index():
+    return {'data': 'hello world'}
+
+
+
+
+
+@api.get('/item/{itemid:int}')
+def get_item(itemid):
+    return {
+        'route': 'dynamic',
+        'itemid': itemid
+    }
+
+
+
+=========
+
+msalah@EQ-EQ6298254:~/wo
+
+{"route":"dynamic","itemid":1.234,"source":"float"}msalah@EQ-EQ6298254:~/work/ds/api$ cat main.py
+from fastapi import FastAPI
+api = FastAPI(
+    title='My API'
+)
+@api.get('/')
+def get_index():
+    return {'data': 'hello world'}
+
+
+
+
+
+@api.get('/item/{itemid:float}')
+def get_item_float(itemid):
+    return {
+        'route': 'dynamic',
+        'itemid': itemid,
+        'source': 'float'
+    }
+@api.get('/item/{itemid}')
+def get_item_default(itemid):
+    return {
+        'route': 'dynamic',
+        'itemid': itemid,
+        'source': 'string'
+    }
+msalah@EQ-EQ6298254:~/work/ds/api$
+
+
+
+
+msalah@EQ-EQ6298254:~/work/ds/api$ curl -X GET -i http://127.0.0.1:8000/item/my_item
+HTTP/1.1 404 Not Found
+date: Wed, 22 Jul 2026 11:27:00 GMT
+server: uvicorn
+content-length: 22
+content-type: application/json
+
+{"detail":"Not Found"}msalah@EQ-EQ6curl -X GET -i http://127.0.0.1:8000/item/1234
+HTTP/1.1 200 OK
+date: Wed, 22 Jul 2026 11:27:11 GMT
+server: uvicorn
+content-length: 33
+content-type: application/json
+
+
+documention 
+-------------
+http://localhost:8000/redoc
+
+
+
