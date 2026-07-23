@@ -5,3 +5,7 @@ transactions
 #plt.bar(transactions['Month'], transactions['Product1'])
 transactions.head()
 transactions.columns
+
+
+
+pd.read_excel("tmp.xlsx", index_col=0, comment="#")
