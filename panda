@@ -9,3 +9,142 @@ transactions.columns
 
 
 pd.read_excel("tmp.xlsx", index_col=0, comment="#")
+
+
+
+===========================================
+
+
+# Creation of a NumPy array with 3 rows and 4 columns
+=====================================================
+array = np.array ([[1, 2, 3, 4],
+                   [5, 6, 7, 8],
+                   [9, 10, 11, 12]])
+# Instantiation of a DataFrame
+df = pd.DataFrame (data = array, # The data to format
+                   index = ['i_1', 'i_2', 'i_3'], # The indices of each entry
+                   columns = ['A', 'B', 'C', 'D']) # The name of the columns
+
+
+
+
+============================================================
+
+3. Creation of a DataFrame: from a dictionary
+=================================================
+Another way to create a DataFrame is to use a dictionary. Thanks to this technique, the columns can be of different type and their names are already given when creating the DataFrame.
+Example:
+# Creation of a dictionary
+dictionary = {'A': [1, 5, 9],
+              'B': [2, 6, 10],
+              'C': [3, 7, 11],
+              'D': [4, 8, 12]}
+# Instantiation of a DataFrame
+df = pd.DataFrame (data = dictionary,
+                   index = ['i_1', 'i_2', 'i_3'])
+
+
+import pandas as pd 
+# Insert your code here
+dictionary={"product":["honey","flour","wine"]
+   ,"expiration":["08/10/2025","09/25/2024","10/15/2023"]
+    ,"quantity":[100,55,1800]
+  ,"price":[2,3,10]}
+​
+​
+df= pd.DataFrame(data=dictionary)
+
+
+===================================
+4. Creation of a DataFrame: from a data file
+=============================================
+import pandas as pd
+transactions=pd.read_csv(filepath_or_buffer='transactions.csv',sep=',',header=0,index_col=0)
+transactions
+
+
+# You can directly specify the name of the column containing the indices
+​
+transactions = pd.read_csv(filepath_or_buffer = 'transactions.csv', # file path
+                           sep = ',',                               # character separating values
+                           header = 0,                              # number of the row containing column names
+                           index_col = 'transaction_id')            # name of the column that indexes the entries
+​
+​
+# You can also directly enter the number of the column that indexes the entries
+​
+transactions = pd.read_csv(filepath_or_buffer = 'transactions.csv',
+                           sep = ',',
+                           header = 0,
+                           index_col = 0) # number of the column that indexes the entries
+
+
+==================
+6. Visualization of a DataFrame: head method, columns and shape attributes
+
+• (a) Display the first 20 lines of the transactions DataFrame.
+
+# Insert your code here
+transactions.head(20)
+
+# Insert your code here
+transactions.tail(10)
+
+
+
+# Creation of a DataFrame df from a dictionary
+dictionary = {'A': [1, 5, 9],
+              'B': [2, 6, 10],
+              'C': [3, 7, 11],
+              'D': [4, 8, 12]}
+df = pd.DataFrame (data = dictionary, index = ['i_1', 'i_2', 'i_3'])
+These instructions produce the same DataFrame as before:
+	A	B	C	D
+i_ 1	1	2	3	4
+i _2	5	6	7	8
+i_ 3	9	10	11	12
+# Display of df DataFrame columns
+print(df.columns)
+>>> ['A', 'B', 'C', 'D']
+
+
+
+# Display the dimensions of df
+print (df.shape)
+>>> (3,4)
+
+
+• (c) Display the dimensions of the DataFrame transactions as well as the name of the 5th column. Remember that in Python the indices start from 0.
+
+transactions.columns[4]
+​
+transactions.shape
+(23053, 9)
+
+print(transactions.shape)
+print(transactions.columns[4])
+
+
+
+==============================
+selecting column 
+ Display of the 'cust_id' column
+print(transactions['cust_id'])
+# Extraction of 'cust_id' and 'Qty' columns from transactions
+cust_id_qty = transactions[["cust_id", "Qty"]]
+
+# Extraction of quantitative variables
+num_var_names = ['Qty', 'Rate', 'Tax', 'total_amt']
+num_vars = transactions[num_var_names]
+​
+# Display of the first 5 lines of each DataFrame
+print ("Categorical variables: \n")
+print (cat_vars.head(), "\n \n")
+​
+print ("Quantitative variables: \n")
+print (num_vars.head())
+​
+======================
+8. Selecting rows of a DataFrame:  loc and iloc methods
+
+
