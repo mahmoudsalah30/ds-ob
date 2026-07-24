@@ -148,3 +148,66 @@ print (num_vars.head())
 8. Selecting rows of a DataFrame:  loc and iloc methods
 
 
+# We retrieve the line of index 80712190438 of the num_vars DataFrame
+print(num_vars.loc[80712190438])
+>>                 Rate    Tax  total_amt
+
+
+==============================================
+8. Selecting rows of a DataFrame:  loc and iloc methods
+==========================================
+# We retrieve the rows at indices 80712190438, 29258453508 and 51750724947 from the transactions DataFrame
+transactions.loc[[80712190438, 29258453508, 51750724947]]
+loc can also take a column or list of columns as an argument in order to refine the data extraction:
+# We extract the columns 'Tax' and 'total_amt' from the rows at index 80712190438 and 29258453508
+transactions.loc[[80712190438, 29258453508], ['Tax', 'total_amt']]
+
+
+# Extraction of the first 4 rows and the first 3 columns of transactions
+transactions.iloc[0:4, 0:3]
+This instruction produces the following DataFrame:
+
+========================================================
+
+
+9. Conditional indexing of a DataFrame
+====================================
+
+
+# We select the rows of the DataFrame df for which the column 'col 2' is equal to 3.
+df[df['col 2'] == 3]
+df.loc[df['col 2'] == 3]
+
+# Insert your code here
+transactions
+#transactions_eshop=transactions[transactions['Store_type'=="e-Shop"
+​
+transactions_eshop=transactions.loc[transactions['Store_type']=='e-Shop']
+#transactions_eshop['tran_date']
+transactions_eshop
+transactions_id_date=transactions_eshop[['tran_date','cust_id']]
+
+
+##transactions.loc['cust_id']=='268819'
+transactions.loc[transactions['cust_id']==268819]
+
+# Extraction of the transactions ofthe customer which identifier is 268819
+transactions_client_268819 = transactions.loc[transactions['cust_id'] == 268819]
+​
+​
+# Computation of the total amount of transactions
+total = 0
+​
+# For each amount in the column 'total_amt'
+for amount in transactions_client_268819['total_amt']:
+    # We sum the amounts
+    total += amount
+========================
+
+
+10. Quick statistical study of the data in a DataFrame.
+[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
+
+transactions.describe()
+transactions['Store_type'].value_counts()
+transactions['Store_type'].value_counts()
