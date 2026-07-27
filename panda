@@ -208,6 +208,15 @@ for amount in transactions_client_268819['total_amt']:
 10. Quick statistical study of the data in a DataFrame.
 [[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[
 
+
+
+is most likely caused by NaN values (Not a Number), not infinity.
+==================================================================
+print(df.isna().sum())
+
+
+
+
 transactions.describe()
 transactions['Store_type'].value_counts()
 transactions['Store_type'].value_counts()
