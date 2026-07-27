@@ -1,3 +1,20 @@
+
+
+The HTTP response to this request contains only the body. To see the headers, we can add the -i argument to the command:
+=========================================================================================================================
+curl -X GET -i https://jsonplaceholder.typicode.com/posts/1
+
+
+
+To do this, you need to precede your headers with the -H argument and the body with the -d argument.
+======================================================================================================
+curl -X PUT -i\
+ -H "Content-Type: application/json"\
+ -d '{"id": 1, "content": "hello world"}'\
+ https://jsonplaceholder.typicode.com/posts/1
+
+
+
 python3 -m venv venv
 source venv/bin/activate
 pip3 install fastapi httptools uvloop uvicorn
