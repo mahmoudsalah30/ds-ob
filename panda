@@ -1,6 +1,7 @@
 drop column 
 --------------
 feats =df.drop(columns='Survived')
+X = df_reg.drop('price', axis = 1)
 
 
 
