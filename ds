@@ -20,3 +20,148 @@ y_pred = model.predict(X_test)
 
 model.score(X_test,y_test)
 Whether to develop a classification or regression algorithm, this will be almost always in the same way.
+
+
+classification
+-----------------
+import warnings
+warnings.filterwarnings('ignore')
+
+import pandas as pd 
+
+
+info 
+-----
+df_class.info()
+
+
+
+(f) With the function train_test_split, separate the dataset into a training set (X_train,y_train) and a test set (X_test, y_test) 
+so that the test part contains 20% of the initial dataset. Set the random_state to 42.
+*********************************************************************************************************************************
+
+X_train and y_train are the explanatory and target variables of the training set.
+
+X_test and y_test are the explanatory and target variables of the test set.
+
+The test_size argument corresponds to the proportion of the dataset we want to keep for the test set. 
+In the previous example, this proportion corresponds to 15% of the initial dataset.
+
+The random_state argument allows to guarantee the reproducibility of the results by setting the randomness. In other words, 
+by setting it to a number (no matter what its value), we make sure to get the same result if we use the function again.
+
+(f) With the function train_test_split, separate the dataset into a training set (X_train,y_train) and a test set 
+(X_test, y_test) so that the test part contains 20% of the initial dataset. Set the random_state to 42.
+
+
+
+
+
+
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state=42)
+
+===================================================================================================
+
+(g) Load the DecisionTreeClassifier function from the sklearn.tree sub-module.
+
+from sklearn.tree import DecisionTreeClassifier
+
+
+
+#Modele instantiation
+dt_clf = DecisionTreeClassifier(random_state=42)
+
+#Modele training 
+dt_clf.fit(X_train, y_train)
+
+
+#Prediction on test data
+y_pred_test = dt_clf.predict(X_test)
+
+print(y_pred_test[:5])
+
+print(y_test[:5])
+
+#Comparison between y_test and y_pred_test : 
+#True :  algorithm predicted the right class, 
+#False : he was wrong
+
+print(y_test[:5] == y_pred_test[:5])
+
+
+
+(k)
+
+(1) Evaluate the model using the score method on the training data.
+
+(2) Evaluate the model using the score method on the test data.
+
+print("score train : " , dt_clf.score(X_train, y_train))
+
+print("score test : ", dt_clf.score(X_test,y_test))
+
+
+
+
+. Regression
+==========
+3.1 Reminder
+In Machine Learning, the objective is to predict the value of a target variable from explanatory variables. 
+In a regression problem, the target variable takes continuous values. These values are numerical : price of a house, quantity of oxygen in the air of a city, 
+etc. The target variable can therefore take an infinity of values.
+
+
+X_train, X_test,y_train, y_test = train_test_split(X, y , test_size = 0.2, random_state=42)
+
+
+
+(e) Load the DecisionTreeRegressor function from the sklearn.tree sub-module.
+
+from sklearn.tree import DecisionTreeRegressor
+
+(f)
+
+(1) Instantiate a DecisionTreeRegressor model called dt_reg with a random_state set to 42.
+
+(2) Train the model on the training dataset using the fit method of the DecisionTreeRegressor class.
+
+#Model instantiation
+dt_reg = DecisionTreeRegressor(random_state=42)
+
+#Model training 
+dt_reg.fit(X_train, y_train)
+
+(g)
+
+(a) Make a prediction on test data and store these predictions in y_pred_test.
+
+(b) Display the first 5 predictions.
+
+#Prediction on test data 
+y_pred_test = dt_reg.predict(X_test)
+
+print(y_pred_test[:5])
+
+(h) Display the first 5 lines of y_test and compare them to y_pred_test.
+
+
+print(y_test[:5])
+
+#Comparison between y_test and y_pred_test: we measure the apart between what the algorithm and the result predict
+
+print(y_test[:5] - y_pred_test[:5])
+
+
+(i)
+
+(1) Evaluate the model using the score method on the training data.
+
+(2) Evaluate the model using the score method on the test data.
+
+print("score train : " , dt_reg.score(X_train, y_train))
+
+print("score test : ", dt_reg.score(X_test,y_test))
+
