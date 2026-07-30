@@ -1,0 +1,27 @@
+We can install everything with the following command:
+===========================================================
+curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644
+Now let's check the Kubernetes installation:
+============================================
+kubectl version
+
+
+To perform this check, run the following command:
+===============================================
+k3s kubectl get nodes
+
+
+We're now going to create our first resource by creating a Pod from the nginx image via imperative configuration :
+
+kubectl run nginx --image=nginx
+We have just created our first Pod, and can validate its presence with the following command:
+
+kubectl get pod
+
+
+create yml 
+============
+kubectl apply -f wordpress.yml
+Check the list of existing pods
+
+kubectl get pod
