@@ -1,1 +1,22 @@
+Therefore, to train a Machine Learning model with Scikit-Learn, this will always be done in the same way in 4 lines of code:
+============================================================================================================================
 
+# Instancing of the chosen model 
+# To create a model, we generate an object of the class corresponding to this object
+# LinearRegression is a regression algorithm
+# We can specify some parameters of the algorithm between the brackets.
+
+model = LinearRegression() 
+
+# Model training on the training dataset
+
+model.fit(X_train,y_train) 
+
+# Prediction of the target variable for the testing dataest, these predictions are stored in y_pred
+
+y_pred = model.predict(X_test) 
+
+# Evaluation of the model: from X_test, we predict the target variable that we compare to y_test
+
+model.score(X_test,y_test)
+Whether to develop a classification or regression algorithm, this will be almost always in the same way.
