@@ -25,3 +25,113 @@ kubectl apply -f wordpress.yml
 Check the list of existing pods
 
 kubectl get pod
+
+
+
+It is possible to create a Deployment that runs 10 replicas of an NGINX container with the following kubectl imperative command:
+================================================================================================================================
+kubectl create deployment nginx-deployment --image=nginx --replicas=10
+Let's check that the Deployment has been created with the following command:
+-----------------------------------------------------------------------------
+kubectl get all # Allows us to retrieve all available resources
+
+
+Delete nginx-deployment :
+=============================
+kubectl delete deployment nginx-deployment
+
+
+
+Write the following content to a deployment.yml file:
+--------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: web
+spec:
+  selector:
+    matchLabels:
+      app: web
+  replicas: 10
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+
+spec.replicas: specifies the number of Pods to be executed.
+
+strategy.type: specifies the deployment strategy to be used. In our case, we specify RollingUpdate, which means that if we update the application with a new deployment, the new versions are progressively deployed to the Pods to avoid downtime.
+
+spec.containers: specifies the container image to be executed in each of the Pods and ports to be exposed.
+===============================================================================================================
+kubectl apply -f deployment.yml
+We can see the list of resources within a kubernetes cluster and their abbreviations using the following command:
+-----------------------------------------------------------------------------------------------------------------
+kubectl api-resources
+
+Delete a Pod nginx-deployment-[id] (replace the "id" field with your own)
+========================================================================
+kubectl delete Pod nginx-deployment-[ID]
+
+
+Let's check that the Deployment has been created with the following command:
+----------------------------------------------------------------------------
+kubectl get all
+
+
+We can see the list of resources within a kubernetes cluster and their abbreviations using the following command:
+==========================================================================================================
+kubectl api-resources
+
+
+Let's delete one of the Pods in our cluster to see how Kubernetes is able to recover on its own.
+============================================================================================
+
+msalah@EQ-EQ6298254:~$ kubectl get all
+NAME                                    READY   STATUS    RESTARTS   AGE
+pod/nginx-deployment-7d6869886d-4cdxx   1/1     Running   0          5s
+pod/nginx-deployment-7d6869886d-4kldr   1/1     Running   0          5s
+pod/nginx-deployment-7d6869886d-4sxjd   1/1     Running   0          5s
+pod/nginx-deployment-7d6869886d-5mwq9   1/1     Running   0          5s
+pod/nginx-deployment-7d6869886d-7hm74   1/1     Running   0          5s
+pod/nginx-deployment-7d6869886d-m9bck   1/1     Running   0          5s
+pod/nginx-deployment-7d6869886d-p42fm   1/1     Running   0          5s
+pod/nginx-deployment-7d6869886d-r2b98   1/1     Running   0          5s
+pod/nginx-deployment-7d6869886d-r9j5d   1/1     Running   0          5s
+pod/nginx-deployment-7d6869886d-xh5cq   1/1     Running   0          5s
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.43.0.1    <none>        443/TCP   16h
+
+NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nginx-deployment   10/10   10           10          6s
+
+NAME                                          DESIRED   CURRENT   READY   AGE
+replicaset.apps/nginx-deployment-7d6869886d   10        10        10      6s
+msalah@EQ-EQ6298254:~$ kubectl delete Pod nginx-deployment-7d6869886d-4cdxx
+
+services
+========
+A Kubernetes service can be configured using a YAML manifest, more information on services is available via the documentation https://kubernetes.io/docs/concepts/services-networking/service/ :
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
