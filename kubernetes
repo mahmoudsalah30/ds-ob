@@ -135,3 +135,34 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 8080
+
+
+namespaces
+-----------
+To display API resources and see which ones have Namespaces in a Kubernetes cluster, we can use the kubectl command:
+kubectl api-resources
+
+
+Most Kubernetes distributions will create three or four Namespaces by default. We can see these default Namespaces when we create a new cluster using the kubectl client.
+kubectl get namespace
+Output display:
+NAME STATUS AGE
+default Active 2d5h
+kube-system Active 2d5h
+kube-public Active 2d5h
+kube-node-lease Active 2d5h
+
+	We can create Namespaces using the kubectl client as follows:
+kubectl create namespace datascientest
+
+
+	Now let's check our Namespaces list:
+kubectl get namespaces # or kubectl get ns
+
+
+	We can also list resources deployed in the namespace datascientest by adding the -n or --namespace flag to specify the namespace name:
+kubectl get all -n datascientest
+
+the message No resources found in datascientest namespace. indicates that we have no resources in this namespace. So let's create a deployment called wordpress in Namespace Datascientest which will contain 3 replicas of our Pods.
+kubectl create deployment wordpress --image=wordpress --replicas=3 --namespace datascientest
+
