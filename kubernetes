@@ -166,3 +166,5 @@ kubectl get all -n datascientest
 the message No resources found in datascientest namespace. indicates that we have no resources in this namespace. So let's create a deployment called wordpress in Namespace Datascientest which will contain 3 replicas of our Pods.
 kubectl create deployment wordpress --image=wordpress --replicas=3 --namespace datascientest
 
+
+dd
