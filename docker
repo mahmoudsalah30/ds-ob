@@ -55,4 +55,109 @@ docker container run -d --name my_ubuntu ubuntu:latest
   	• You can use the command docker container inspect followed by the container id or name to be able to see the container properties:
 	Run this command to inspect the container
 docker container inspect my_ubuntu
-  
+
+
+
+4. Communication with containers
+===============================
+	Download the elasticsearch image with the 7.2.0 tag
+docker image pull elasticsearch:7.2.0
+
+
+Start an ElasticSearch instance with the following properties:
+	○ in detached mode
+	○ force deletion when the container is shut down
+	○ the container name must be my_es_container
+	○ an environment variable discovery.type must be set to single-node
+
+docker container run -d --rm -e "discovery.type=single-node" -p 9200:9200 --name my_es_container elasticsearch:7.2.0
+
+
+	Run the following command to find the IP address of the container
+docker container inspect my_es_container | grep IPAddress
+
+
+We can now restart our container using this redirection.
+	Run this command to forward ports 9200 and 9300 on the container to ports 9201 and 9301 on the host machine
+
+
+docker container run -d --rm -e "discovery.type=single-node" -p 9201:9200 -p 9301:9300 --name my_es_container elasticsearch:7.2.0
+
+• Run this command to display the list of networks
+docker network ls
+
+Docker inspect bridge
+
+
+• Run this command to create the network my_network.
+docker network create --subnet 172.50.0.0/16 --gateway 172.50.0.1 my_network
+
+• List the networks
+docker network ls
+
+• Inspect the network my_network.
+docker network inspect my_network
+
+	• Run this cell to launch another ElasticSearch container on this network
+docker container run -d --rm\
+ -e "discovery.type=single-node"\
+ --network my_network\
+ --name my_es_container3 elasticsearch:7.2.0
+
+
+• Run the following command to make a request to this address from inside the bridge network
+docker container run datascientest/curl:latest http://172.50.0.2:9200    
+
+
+ch 5 persistent volume 
+==========================
+• Run this command to create a volume
+docker volume create my_volume
+• Run this command to list the existing volumes
+docker volume ls 
+• Inspect the volume my_volume.
+docker volume inspect my_volume
+
+docker mount
+===========
+docker container run -it --name my_ubuntu\
+ --mount type=volume,src=my_volume,dst=/home/my_folder\
+ --rm\
+ ubuntu:latest bash
+
+
+
+Delete the volume my_volume by running the following command
+==============================================
+docker volume rm my_volume
+
+
+
+Another way to persist data and easily exchange files with the host machine is to use the --volume argument with a folder that already exists.
+For example, we can run the following command :
+docker container run -it\
+ --name my_ubuntu\
+ --volume $HOME:/home/my_folder\
+ --rm\
+ ubuntu:latest bash
+
+
+
+
+ch 7 docker compose 
+==============
+
+
+
+	Stop the containers launched by Docker Compose
+	Replace the contents of the docker-compose.yml file with the following lines
+services:
+  jupyter:
+    image: jupyter/minimal-notebook:ubuntu-22.04
+  elasticsearch:
+    image: elasticsearch:7.2.0
+    environment:
+      discovery.type: single-node
+
+
+
