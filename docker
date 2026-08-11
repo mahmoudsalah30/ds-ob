@@ -1,0 +1,58 @@
+• Run this command to download the ubuntu image with the latest tag
+docker image pull ubuntu:latest
+
+• Run this command to list the images on the machine
+docker image ls 
+
+
+• Run this command to launch an instance of ubuntu and interact with it
+docker container run -it ubuntu:latest    
+
+
+• We can restart a stopped container by using the command docker start followed by the container name or id. For example, if the container is called practical_murdock (the names are randomly generated), we can run the following command:
+docker container start practical_murdock
+
+
+
+• Be careful to change the name of the container with yours !
+docker container stop mystifying_matsumoto
+
+
+• In a command, run the following command to run a container in the background
+docker container run --detach --name my_ubuntu ubuntu:latest bash
+
+
+
+• Stop and delete the container
+docker container stop my_ubuntu
+docker container rm my_ubuntu
+
+
+• By adding the -rm or --remove argument, we can force the deletion of a container at shutdown.	Re-launch this container with this new argument
+docker container run --rm --detach --name my_ubuntu ubuntu:latest bash
+
+• One of the last simple arguments you can use to start a container is -e. This argument allows you to create an environment variable. This is like defining a variable with an export 	•  for example. This command can be very useful for passing specific arguments to a container.
+	Run the following command to run a container with a my_variable environment variable
+    
+• docker container run -it --rm --name my_ubuntu -e "my_variable='hello everyone'" ubuntu:latest bash 	Once in the container, run the following command to check the contents of the variable my_variable
+echo $my_variable  
+
+
+
+Argument	            Use
+--------------------  ---  
+-it or --interactive	allows you to interact with the container via the command issued.
+-d or --detach	      Allows you to launch the container in the background
+-n or --name	        Allows you to choose the name of the container
+--rm	                Force deletion of the container after it has stopped
+-e	                  Allows you to define an environment variable in the container
+
+	Start a ubuntu container named my_ubuntu in the background. We will not force the deletion of the container when it is stopped
+docker container run -d --name my_ubuntu ubuntu:latest 
+
+
+
+  	• You can use the command docker container inspect followed by the container id or name to be able to see the container properties:
+	Run this command to inspect the container
+docker container inspect my_ubuntu
+  
