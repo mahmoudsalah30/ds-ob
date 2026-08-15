@@ -159,8 +159,10 @@ services:
     environment:
       discovery.type: single-node
 
+show compose logs 
+=--------------------
 
-
+ubuntu@ip-172-31-0-250:~/work/docker$ docker compose logs
  docker exec -it auth-debug sh
 
 
