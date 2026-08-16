@@ -115,7 +115,13 @@ curl -X PATCH -i http://127.0.0.1:8000/
 curl -X GET -i http://127.0.0.1:8000/other       
 
 
+documention
+=============
+ http://localhost:8000/docs
+http://localhost:8000/redoc
 Open the URL http://localhost:8000/redoc 
+
+
 
 
 
