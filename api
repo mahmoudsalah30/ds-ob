@@ -1,3 +1,30 @@
+the simplest library to make requests with Python is probably the Requests library.
+====================================================================
+pip3 install requests
+# or conda install requests
+import requests
+# creating a GET request
+r = requests.get('https://jsonplaceholder.typicode.com/posts/1')
+# getting the response elements
+response_dict = r.json()
+response_header = r.headers
+status_code = r.status_code
+We can of course pass a body, headers with this library.
+r = requests.put(
+    url='https://jsonplaceholder.typicode.com/posts/1',
+    data={"id": 1, "content": "hello world"},
+    headers={"Content-Type": "application/json"}
+    )
+
+
+Note that in the REST standard, the endpoint must designate an object that we wish to manipulate and the methods must correspond to the following effects
+	• GET to retrieve information
+	• POST to add new data to the server
+	• PUT to modify data already on the server
+	• DELETE to delete data
+This standard is not the only one and is not mandatory to implement to get an efficient API but it is probably the most known.
+
+
 
 
 The HTTP response to this request contains only the body. To see the headers, we can add the -i argument to the command:
