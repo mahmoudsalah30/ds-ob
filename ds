@@ -35,6 +35,9 @@ info
 df_class.info()
 
 
+1
+
+
 
 (f) With the function train_test_split, separate the dataset into a training set (X_train,y_train) and a test set (X_test, y_test) 
 so that the test part contains 20% of the initial dataset. Set the random_state to 42.
