@@ -1,1 +1,115 @@
-1
+import pytest
+class Wallet(object):
+    def __init__(self, initial_amount=0):
+        self.balance = initial_amount
+
+    def spend_cash(self, amount):
+        if self.balance < amount :
+            raise InsufficientFunds('not enough available to spend {}'.format(amount))
+        self.balance -= amount
+
+    def add_cash(self, amount):
+            self.balance += amount
+
+    @pytest.fixture
+
+class InsufficientFunds(Exception):
+    pass
+
+--
+from wallet import Wallet,InsufficientFunds,empty_wallet
+import pytest
+def empty_wallet():
+  '''Returns a Wallet instance with a zero balance'''
+  return Wallet()
+@pytest.fixture
+def wallet():
+  '''Returns a Wallet instance with a balance of 20'''
+  return Wallet(20)
+def test_default_initial_amount(empty_wallet):
+    assert empty_wallet.balance == 0
+
+def test_setting_initial_amount(wallet):
+    assert wallet.balance == 20
+
+def test_wallet_add_cash(wallet):
+    wallet.add_cash(80)
+    assert wallet.balance == 100
+
+def test_wallet_spend_cash(wallet):
+    wallet.spend_cash(10)
+    assert wallet.balance == 10
+
+def test_wallet_spend_cash_raises_exception_on_insufficient_amount(empty_wallet):
+    with pytest.raises(InsufficientAmount):
+        empty_wallet.spend_cash(100)
+
+
+
+
+
+import library
+
+def test_add_book():
+    lib = library.Library()
+    book = library.Book("The Lord of the Rings", "J.R.R. Tolkien")
+    lib.add_book(book)
+    assert lib.list_books() == [(book.title, book.author)]
+
+def test_remove_book():
+    lib = library.Library()
+    book = library.Book("The Lord of the Rings", "J.R.R. Tolkien")
+    lib.add_book(book)
+    lib.remove_book(book.title)
+    assert lib.list_books() == []
+
+def test_search_books_by_author():
+    lib = library.Library()
+    book1 = library.Book("The Lord of the Rings", "J.R.R. Tolkien")
+    book2 = library.Book("Harry Potter", "J.K. Rowling")
+    lib.add_book(book1)
+    lib.add_book(book2)
+    books = lib.search_books_by_author("J.R.R. Tolkien")
+    assert books == [(book1.title, book1.author)]
+
+def test_generate_statistics():
+    lib = library.Library()
+    book1 = library.Book("The Lord of the Rings", "J.R.R. Tolkien")
+    book2 = library.Book("Harry Potter", "J.K. Rowling")
+    lib.add_book(book1)
+    lib.add_book(book2)
+    stats = lib.generate_statistics()
+    assert stats == {
+        'total_books': 2,
+        'unique_authors': {'J.R.R. Tolkien', 'J.K. Rowling'},
+    }
+
+
+class Book:
+    def __init__(self, title, author):
+        self.title = title
+        self.author = author
+
+class Library:
+    def __init__(self):
+        self.books = []
+
+    def add_book(self, book):
+        self.books.append(book)
+
+    def remove_book(self, title):
+        self.books = [book for book in self.books if book.title != title]
+
+    def list_books(self):
+        return [(book.title, book.author) for book in self.books]
+
+    def search_books_by_author(self, author):
+        return [(book.title, book.author) for book in self.books if book.author == author]
+
+    def generate_statistics(self):
+        total_books = len(self.books)
+        unique_authors = set(book.author for book in self.books)
+        return {
+            'total_books': total_books,
+            'unique_authors': unique_authors,
+        }
