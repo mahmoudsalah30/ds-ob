@@ -1,3 +1,7 @@
+
+pip3 install scikit-learn
+
+
 Therefore, to train a Machine Learning model with Scikit-Learn, this will always be done in the same way in 4 lines of code:
 ============================================================================================================================
 
