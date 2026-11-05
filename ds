@@ -172,3 +172,75 @@ print("score train : " , dt_reg.score(X_train, y_train))
 
 print("score test : ", dt_reg.score(X_test,y_test))
 
+
+
+
+Case study: classification problem
+================================
+
+. Data preparation
+(a) Run the following cell to import the necessary packages.
+
+
+import pandas as pd
+import numpy as np
+import warnings
+warnings.filterwarnings('ignore')
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.metrics import f1_score
+from imblearn.over_sampling import RandomOverSampler
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+
+
+
+
+(b) Read the file 'churn.csv' in a DataFrame and display the first lines.
+
+# Insert your code
+df = pd.read_csv('churn.csv')
+df.head()
+
+
+(c) Delete the column CustomerId.
+df = df.drop(['customerID'], axis=1)
+
+
+(d) Display the number of missing values in the DataFrame.
+
+df.info()
+df.isna().sum()
+
+(e) Display the categories taken by the variable Partner and by the variable Dependents. What do you notice?
+
+         display(df['Partner'].value_counts()) 
+         display(df['Dependents'].value_counts()) 
+
+
+(f)
+(1) For the variable Partner, replace the values "Yess " by "Yes".
+(2) For the variable Dependents, replace the "?" by the most common modality
+
+          df['Partner'] = df['Partner'].replace("Yess ", "Yes")
+          df['Dependents'] = df['Dependents'].replace("?", "No")
+
+
+
+(g) Some values of the variable TotalCharges are filled with a space. Delete these values and change the type of TotalCharges to float.
+     df = df[df['TotalCharges'] != ' ']
+
+      df['TotalCharges'] = df['TotalCharges'].astype('float')
+
+
+(h) Separate the dataset into two DataFrames :
+feats containing the explanatory variables,
+
+target containing the target variable Churn.
+
+feats = df.drop('Churn', axis=1)
+target = df['Churn']
+
