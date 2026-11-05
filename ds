@@ -244,3 +244,295 @@ target containing the target variable Churn.
 feats = df.drop('Churn', axis=1)
 target = df['Churn']
 
+
+
+(i) Split the dataset into a training set (X_train,y_train) and a test set (X_test, y_test) so that the test part contains 25% of the initial dataset.
+X_train, X_test, y_train, y_test = train_test_split(feats, target, test_size=0.25, random_state = 42)
+
+(j) Replace the missing values for the variables MonthlyCharges and TotalCharges with their respective means by estimating the mean on the training set and applying it to the training and test set.
+
+imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
+
+X_train[['MonthlyCharges', 'TotalCharges']] = imputer.fit_transform(X_train[['MonthlyCharges', 'TotalCharges']])
+
+X_test[['MonthlyCharges', 'TotalCharges']] = imputer.transform(X_test[['MonthlyCharges', 'TotalCharges']])
+
+
+(k) Standardize the numerical variables ('tenure', 'MonthlyCharges', 'TotalCharges') using StandardScaler by estimating the parameters on the training set and applying it to the training and test set.
+   We have seen in the notebook 4 "Methodology", th
+
+cols = ['tenure', 'MonthlyCharges', 'TotalCharges']
+sc = StandardScaler()
+X_train[cols] = sc.fit_transform(X_train[cols])
+X_test[cols] = sc.transform(X_test[cols])
+
+
+(l) Encode modalities of the target variable Churn using a LabelEncoder by estimating the encoding on the training set and applying it to the training and test set.
+
+
+le = LabelEncoder()
+
+y_train = le.fit_transform(y_train)
+
+y_test = le.transform(y_test)
+
+#Other solution without the LabelEncoder
+
+#def replace_yes_no(x):
+#    if x == 'No':
+#        return 0
+#    if x == 'Yes':
+#        return 1
+#y_train = y_train.apply(replace_yes_no)
+#y_test = y_test.apply(replace_yes_no)
+
+
+(m) Encode the modalities of the explanatory variables gender, Partner, Dependents, PhoneService, PaperlessBilling using a OneHotEncoder. 
+Learn and transform the training set, then apply the transformaiton to the test set.
+
+
+# First solution
+
+# The drop = 'first' parameter allows to delete one of the columns created by the OneHotEncoder and thus avoid a multicolinearity problem
+
+oneh = OneHotEncoder(drop = 'first', sparse=False)
+
+cat = ['gender', 'Partner', 'Dependents', 'PhoneService', 'PaperlessBilling']
+
+X_train[cat] = oneh.fit_transform(X_train[cat])
+
+X_test[cat] = oneh.transform(X_test[cat])
+
+# Second solution without 
+
+#def replace_gender(x):
+#    if x == 'Male':
+#        return 0
+#    if x == 'Female':
+#        return 1
+#    
+#def replace_yes_no(x):
+#    if x == 'No':
+#        return 0
+#    if x == 'Yes':
+#        return 1
+    
+#X_train['gender'] = X_train['gender'].apply(replace_gender)
+#X_train['Dependents'] = X_train['Dependents'].apply(replace_yes_no)
+#X_train['Partner'] = X_train['Partner'].apply(replace_yes_no)
+#X_train['PhoneService'] = X_train['PhoneService'].apply(replace_yes_no)
+#X_train['PaperlessBilling'] = X_train['PaperlessBilling'].apply(replace_yes_no)
+
+#X_test['gender'] = X_test['gender'].apply(replace_gender)
+#X_test['Dependents'] = X_test['Dependents'].apply(replace_yes_no)
+#X_test['Partner'] = X_test['Partner'].apply(replace_yes_no)
+#X_test['PhoneService'] = X_test['PhoneService'].apply(replace_yes_no)
+#X_test['PaperlessBilling'] = X_test['PaperlessBilling'].apply(replace_yes_no)
+
+
+===
+3. Classification
+Our data are ready, we can now proceed to the modeling part. For each of the models we are going to implement, we are going to evaluate them thanks to the confusion matrix and the usual metrics:
+the score, the recall, the precision and the f1-score.
+
+   These metrics and their interpretations are detailed in the notebook 3 "Linear et Tree-based models".
+3.1. Logistic Regression
+(a)
+(1) Instantiate a LogisticRegression model and train it on your training data.
+(2) Evaluate the model using the score method on the training and test data.
+========================================================================
+from sklearn.linear_model import LogisticRegression
+
+reglog = LogisticRegression()
+reglog.fit(X_train, y_train)
+
+print('Score on the train set', reglog.score(X_train, y_train))
+print('Score on the test set', reglog.score(X_test, y_test))
+
+
+
+
+b) Evaluate your model by displaying the classification_report and displaying the confusion matrix of it. What can you conclude?
+=================================================================================================================================
+
+from sklearn.metrics import classification_report
+
+y_pred = reglog.predict(X_test)
+
+display(pd.crosstab(y_test,y_pred, rownames=['True'], colnames=['Prediction']))
+
+print(classification_report(y_test, y_pred, ))
+
+# Class 1 is poorly predicted by the model.
+
+
+3.2. DecisionTreeClassifier
+(a)
+
+(1) Build a decision tree model and train it on your training data.
+(2) Evaluate the model using the score method on your training and test data.
+==================================================================================================================
+from sklearn import tree
+
+clf = tree.DecisionTreeClassifier()
+clf.fit(X_train, y_train)
+
+print('Score on the train set ', clf.score(X_train, y_train))
+print('Score on the test set', clf.score(X_test, y_test))
+
+#We observe overfitting
+
+(b) Evaluate your model by displaying the classification_report and the confusion matrix of the model. What can you conclude?
+==================================================================================================================
+from sklearn.metrics import classification_report
+
+y_pred = clf.predict(X_test)
+
+display(pd.crosstab(y_test,y_pred, rownames=['True'], colnames=['Prediction']))
+print(classification_report(y_test, y_pred))
+
+# As with the logistic regression, class 1 is poorly predicted by the model.
+Decision trees allow us to make separations based on the different variables by minimizing a function that we have chosen before. Thanks to these different splits, it is possible to determine the importance of each variable, i.e. the level of impact on the decision linked to this variable only. These importance can be found thanks to the attribute feature_importances_ of our decision tree.
+
+c) Use the decision tree to display the importance of all variables.
+import matplotlib.pyplot as plt
+
+feat_importances = pd.DataFrame(clf.feature_importances_, index=feats.columns, columns=["Importance"])
+feat_importances.sort_values(by='Importance', ascending=False, inplace=True)
+feat_importances.plot(kind='bar', figsize=(8,6))
+plt.show()
+
+The variables MonthlyCharges, TotalCharges and tenure are the most important variables for the classification of the decision tree. We can use these importances to try to reduce the size of our dataset and to interpret our model. The variables that are most important for the decision of the algorithm are: MonthlyCharges and TotalCharges.
+
+(d) Train your model by keeping only the three most important variables, compare these results with the previous model.
+==================================================================================================================
+
+X_train_new = X_train[['MonthlyCharges','TotalCharges','tenure']]
+X_test_new = X_test[['MonthlyCharges','TotalCharges','tenure']]
+
+clf = tree.DecisionTreeClassifier(random_state=42) 
+  
+clf.fit(X_train_new, y_train)
+
+print(clf.score(X_train_new,y_train))
+print(clf.score(X_test_new,y_test))
+
+
+(e) Evaluate your model by displaying the classification_report and the confusion matrix. What can you conclude ?
+===================================================================================================================
+from sklearn.metrics import classification_report
+
+y_pred = clf.predict(X_test_new)
+
+display(pd.crosstab(y_test,y_pred, rownames=['True'], colnames=['Prediction']))
+print(classification_report(y_test, y_pred))
+
+
+We can observe that we do not lose the performance of our model by removing a certain amount of data, the results can even be better. Reducing the dimension of our dataset can therefore be a crucial step in the development of our model.
+
+We can now display the tree corresponding to the different separations with the reduced number of variables. We reinstantiate a model by choosing a maximum depth of the tree of 3 for visualization purposes.
+
+(f) Run the following cell to display the tree.
+=================================================
+from sklearn.tree import plot_tree 
+
+clf = tree.DecisionTreeClassifier(random_state=42,max_depth = 3) 
+
+clf.fit(X_train_new, y_train)
+
+fig, ax = plt.subplots(figsize=(20, 20))  
+
+plot_tree(clf, 
+          feature_names = ['MonthlyCharges','TotalCharges','tenure','gender'],
+          class_names = ['Yes','No'],
+          filled = True, 
+          rounded = True)
+
+plt.show()
+
+
+
+How to interpret this tree?
+
+This is exactly the same logic as for the tree with normalized data :
+
+We first look at the value of tenure, if it is less than 804, we go to the left of the tree. If it is not, we go to the right ;
+If we are in the left subtree, we now look at the MonthlyCharges variable. If it is less than 33.7, we move to the left of the tree, otherwise we move to the right ;
+We do the same with all the decision variables of each node we fall into until we arrive at a leaf, giving us the majority class and therefore the prediction.
+3.3. RandomForest
+(a)
+(1) Instantiate a random forest model and train it on your training data.
+(2) Evaluate the model using the score method on your training and test data.
+
+
+from sklearn.ensemble import RandomForestClassifier
+
+rf = RandomForestClassifier()
+rf.fit(X_train, y_train)
+
+print('Score on the train set', rf.score(X_train, y_train))
+print('Score on the train set', rf.score(X_test, y_test))
+
+
+(b) Evaluate your model by displaying the classification_report and displaying the confusion matrix of it. What can you conclude?
+from sklearn.metrics import classification_report
+
+y_pred = rf.predict(X_test)
+
+print(pd.crosstab(y_test,y_pred))
+print(classification_report(y_test, y_pred))
+
+#We see better results
+
+4. A word about class imbalance
+=================================
+(a) Display the percentage distribution of the target variable.
+target.value_counts(normalize=True)
+
+
+In our customer base, 26.5% of the customers present have ended their contract, which means that a naive model that predicts that all customers stay, would have an accuracy score of 73.4%. So the structure of our dataset already presents a limitation and a potential training bias by its imbalance. A good way to deal with this is to perform resampling on data. This means that we randomly add data to the under represented class (oversampling) or remove data from the overrepresented class (undersampling). The imblearn library allows to do these manipulations.
+
+(b) Run the next cell to perform this resampling and display the new distribution.
+
+rOs = RandomOverSampler()
+X_ro, y_ro = rOs.fit_resample(X_train, y_train)
+print('Oversampled sample classes :', dict(pd.Series(y_ro).value_counts(normalize = True)))
+
+(c) Train your best model with the resampled data and comment on the results.
+
+from sklearn.ensemble import RandomForestClassifier
+
+rf = RandomForestClassifier()
+rf.fit(X_ro, y_ro)
+
+print('Score on train set', rf.score(X_ro, y_ro))
+print('Score on test set', rf.score(X_test, y_test))
+
+from sklearn.metrics import classification_report
+
+y_pred = rf.predict(X_test)
+
+
+print(pd.crosstab(y_test,y_pred))
+print(classification_report(y_test, y_pred))
+
+
+
+It is observed that the resampling made it possible to slightly increase the precision, the recall and the f1-score for class 1. Although in our case the improvement is not significant, we can say that a rebalancing may actually yield better results on the underrepresented class.
+
+5. Conclusion
+Starting with a business problem, we modeled it and trained classification algorithms to solve it.
+
+We have thus created an algorithm able to predict the churn of a company's customer contracts. Thanks to this, the company will be able to target the customers likely to leave and take action to avoid a potential churn.
+
+The RandomForest gives the best results. To go further, we could try to optimize the parameters of each of the models in order to have the best possible score while trying to reduce overfitting.
+
+5.1 To remember
+The preprocessing and exploration of the data set is essential before moving on to the modeling part.
+
+All modifications to your dataset are done after the training and test dataset separation to avoid adding bias to your training.
+
+Each time we train a Machine Learning algorithm in classification, we display its confusion matrix and its classification report to analyze the results.
+
+5.2 What's next ?
+In the next notebook, we will see in parallel the implementation of regression algorithms.
