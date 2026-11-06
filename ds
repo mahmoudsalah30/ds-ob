@@ -269,6 +269,12 @@ X_test[cols] = sc.transform(X_test[cols])
 
 (l) Encode modalities of the target variable Churn using a LabelEncoder by estimating the encoding on the training set and applying it to the training and test set.
 
+*************************************************************************************************************************************************************************************
+/*2.3 Data encoding
+As stated in the introduction of this notebook, a categorical and textual variable will have to be re-encoded. Indeed, most Machine Learning algorithms only take numerical variables as input.
+There are several encoding techniques, two of which are mentioned here: Ordinal Encoding and One Hot Encoding.
+*/
+**************************************************************************************************************************************************************************************
 
 le = LabelEncoder()
 
@@ -332,7 +338,8 @@ X_test[cat] = oneh.transform(X_test[cat])
 
 ===
 3. Classification
-Our data are ready, we can now proceed to the modeling part. For each of the models we are going to implement, we are going to evaluate them thanks to the confusion matrix and the usual metrics:
+Our data are ready, we can now proceed to the modeling part. For each of the models we are going to implement, we are going to evaluate them thanks to the confusion matrix and the 
+usual metrics:
 the score, the recall, the precision and the f1-score.
 
    These metrics and their interpretations are detailed in the notebook 3 "Linear et Tree-based models".
